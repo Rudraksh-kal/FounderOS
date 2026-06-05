@@ -53,8 +53,8 @@ FounderOS/
 ## ⚙️ Setup Instructions
 
 ## a) Clone Repo
-- git clone https://github.com/yourusername/founderos.git
-- cd founderos
+- git clone https://github.com/yourusername/FounderOS.git
+- cd FounderOs
 ## b) Install Backend
 - cd backend
 - npm install
