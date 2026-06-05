@@ -31,7 +31,8 @@ Backend:
 
 ## 📁 Project Structure
 
-<!-- FounderOS/
+```
+FounderOS/
 ├── frontend/
 │   ├── src/
 │   ├── components/
@@ -46,7 +47,8 @@ Backend:
 │   ├── middleware/
 │   └── server.js
 │
-└── README.md -->
+└── README.md
+```
 
 ## ⚙️ Setup Instructions
 
