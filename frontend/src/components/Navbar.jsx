@@ -1,22 +1,34 @@
-import { useState } from "react";
 import {
   Menu,
   LogOut,
   Settings,
   LayoutDashboard,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
 import { signOut } from "firebase/auth";
+
 import { auth } from "../firebase";
+
 import { useAuth } from "../context/AuthContext";
+
 import AuthModal from "./AuthModal";
 import LogoutModal from "./LogoutModal";
 
-function Navbar() {
-  const { user } = useAuth();
+import { useState } from "react";
 
-  const [showAuthModal, setShowAuthModal] =
-    useState(false);
+function Navbar() {
+  const navigate = useNavigate();
+
+  const {
+    user,
+    showAuthModal,
+    setShowAuthModal,
+  } = useAuth();
 
   const [showDropdown, setShowDropdown] =
     useState(false);
@@ -35,39 +47,60 @@ function Navbar() {
     }
   };
 
+  const goToSection = (sectionId) => {
+    navigate("/");
+
+    setTimeout(() => {
+      const section =
+        document.getElementById(sectionId);
+
+      if (section) {
+        section.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    }, 100);
+  };
+
   return (
     <>
       <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-[#1a1a1a]">
         <div className="flex items-center justify-between px-6 sm:px-10 lg:px-20 py-5 text-white">
           <div className="flex items-center gap-12">
-            <a
-              href="#top"
+            <Link
+              to="/"
               className="text-2xl font-bold tracking-wide bg-gradient-to-r from-white to-violet-500 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-all duration-300"
             >
               FounderOS
-            </a>
+            </Link>
 
             <div className="hidden md:flex items-center gap-8 text-[#b3b3b3] text-[15px]">
-              <a
-                href="#features"
+              <button
+                onClick={() =>
+                  goToSection("features")
+                }
                 className="hover:text-violet-400 transition-all duration-300 cursor-pointer"
               >
                 Features
-              </a>
+              </button>
 
-              <a
-                href="#pricing"
+              <button
+                onClick={() =>
+                  goToSection("pricing")
+                }
                 className="hover:text-violet-400 transition-all duration-300 cursor-pointer"
               >
                 Pricing
-              </a>
+              </button>
 
-              <a
-                href="#dashboard"
+              <button
+                onClick={() =>
+                  goToSection("dashboard")
+                }
                 className="hover:text-violet-400 transition-all duration-300 cursor-pointer"
               >
-                Dashboard
-              </a>
+                Functionality
+              </button>
             </div>
           </div>
 
@@ -76,7 +109,9 @@ function Navbar() {
               <>
                 <button
                   onClick={() =>
-                    setShowDropdown(!showDropdown)
+                    setShowDropdown(
+                      !showDropdown
+                    )
                   }
                   className="w-11 h-11 rounded-full bg-violet-600 flex items-center justify-center text-white font-semibold text-lg hover:scale-105 transition-all duration-300"
                 >
@@ -104,8 +139,12 @@ function Navbar() {
 
                     <button
                       onClick={() => {
-                        setShowDropdown(false);
-                        setShowLogoutModal(true);
+                        setShowDropdown(
+                          false
+                        );
+                        setShowLogoutModal(
+                          true
+                        );
                       }}
                       className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#1b1b1b] transition-all duration-300 text-red-400"
                     >

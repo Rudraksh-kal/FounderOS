@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Pricing() {
   const navigate = useNavigate();
+
+  const {
+    user,
+    setShowAuthModal,
+  } = useAuth();
 
   const plans = [
     {
@@ -14,21 +20,24 @@ function Pricing() {
         "1 Team Member",
         "Community Support",
       ],
+      available: true,
     },
     {
       name: "Pro",
       price: "$49",
+      popular: true,
+      available: false,
       features: [
         "Advanced AI Tools",
         "Automation Workflows",
         "Unlimited Team Members",
         "Priority Support",
       ],
-      popular: true,
     },
     {
       name: "Enterprise",
       price: "$99",
+      available: false,
       features: [
         "Custom AI Agents",
         "Dedicated Infrastructure",
@@ -97,26 +106,47 @@ function Pricing() {
 
             <div className="mt-8 space-y-4">
               {plan.features.map((feature, i) => (
-                <p key={i} className="text-[16px]">
+                <p
+                  key={i}
+                  className="text-[16px]"
+                >
                   ✓ {feature}
                 </p>
               ))}
             </div>
 
-            <button
-              onClick={() => navigate("/workspace")}
-              className={`w-full mt-10 py-3 rounded-xl font-medium transition-all duration-300 ${
-                plan.popular
-                  ? "bg-white text-black hover:bg-[#e5e5e5]"
-                  : "bg-violet-600 hover:bg-violet-500"
-              }`}
-            >
-              {plan.name === "Free"
-                ? "Launch Workspace"
-                : plan.name === "Enterprise"
-                ? "Get Started"
-                : "Get Started"}
-            </button>
+            {plan.available ? (
+              <button
+                onClick={() => {
+                  if (!user) {
+                    setShowAuthModal(true);
+                    return;
+                  }
+
+                  navigate("/workspace");
+                }}
+                className="w-full mt-10 py-3 rounded-xl font-medium transition-all duration-300 bg-violet-600 hover:bg-violet-500"
+              >
+                Launch Workspace
+              </button>
+            ) : (
+              <div className="relative group mt-10">
+                <button
+                  disabled
+                  className={`w-full py-3 rounded-xl font-medium cursor-not-allowed ${
+                    plan.popular
+                      ? "bg-white/80 text-black"
+                      : "bg-[#222]"
+                  }`}
+                >
+                  Get Started
+                </button>
+
+                <div className="absolute left-1/2 -translate-x-1/2 top-14 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-red-500/90 border border-red-400 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap pointer-events-none z-50">
+                  Not Available In Your Country
+                </div>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>

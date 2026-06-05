@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Hero() {
   const navigate = useNavigate();
 
+  const {
+    user,
+    setShowAuthModal,
+  } = useAuth();
+
   return (
     <section className="min-h-[80vh] flex flex-col lg:flex-row items-center justify-between px-6 sm:px-10 lg:px-20 gap-16 py-20 bg-black overflow-hidden">
-      
       <motion.div
         initial={{ opacity: 0, x: -80 }}
         animate={{ opacity: 1, x: 0 }}
@@ -27,7 +32,14 @@ function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-5 mt-8">
           <button
-            onClick={() => navigate("/workspace")}
+            onClick={() => {
+              if (!user) {
+                setShowAuthModal(true);
+                return;
+              }
+
+              navigate("/workspace");
+            }}
             className="px-7 py-3.5 rounded-xl bg-violet-600 text-white text-base hover:bg-violet-500 hover:scale-105 transition-all duration-300 cursor-pointer"
           >
             Start Free

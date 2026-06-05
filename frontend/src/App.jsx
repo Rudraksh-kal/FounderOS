@@ -12,6 +12,10 @@ import {
   AuthProvider,
 } from "./context/AuthContext";
 
+import {
+  ChatProvider,
+} from "./context/ChatContext";
+
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -24,44 +28,44 @@ function App() {
   return (
     <SidebarProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
+        <ChatProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={<Landing />}
+              />
 
-            <Route
-              path="/"
-              element={<Landing />}
-            />
+              <Route
+                path="/workspace"
+                element={
+                  <ProtectedRoute>
+                    <Workspace />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/workspace"
-              element={
-                <ProtectedRoute>
-                  <Workspace />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/login"
+                element={<Login />}
+              />
 
-            <Route
-              path="/login"
-              element={<Login />}
-            />
-
-            <Route
-              path="/settings"
-              element={<Settings />}
-            />
-
-          </Routes>
-        </BrowserRouter>
+              <Route
+                path="/settings"
+                element={<Settings />}
+              />
+            </Routes>
+          </BrowserRouter>
+        </ChatProvider>
       </AuthProvider>
     </SidebarProvider>
   );
