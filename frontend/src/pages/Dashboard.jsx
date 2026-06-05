@@ -1,15 +1,9 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import DashboardCard from "../components/DashboardCard";
-
-import {
-  BarChart3,
-  Brain,
-  Activity,
-  CheckCircle2,
-} from "lucide-react";
 
 import { motion } from "framer-motion";
+
+import { BarChart3 } from "lucide-react";
 
 import { useSidebar } from "../context/SidebarContext";
 
@@ -33,118 +27,75 @@ function Dashboard() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="px-6 sm:px-10 lg:px-20 py-12"
+          className="h-[calc(100vh-80px)] flex items-center justify-center px-6"
         >
-          <div className="mb-12">
-            <p className="text-violet-500 font-medium mb-3">
-              DASHBOARD
-            </p>
-
-            <h1 className="text-5xl font-bold">
-              Welcome back, Founder.
-            </h1>
-
-            <p className="text-[#888] mt-5 max-w-2xl leading-7">
-              Monitor startup growth, AI activity, and workspace performance from one intelligent dashboard.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            <DashboardCard
-              title="Revenue"
-              value="$48K"
-              icon={<BarChart3 size={32} />}
-            />
-
-            <DashboardCard
-              title="AI Agents"
-              value="12"
-              icon={<Brain size={32} />}
-            />
-
-            <DashboardCard
-              title="Tasks"
-              value="124"
-              icon={<Activity size={32} />}
-            />
-
-            <DashboardCard
-              title="Completed"
-              value="89%"
-              icon={<CheckCircle2 size={32} />}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mt-10">
-            <div className="xl:col-span-2 bg-[#111] border border-[#222] rounded-3xl p-8">
-              <div className="flex items-center justify-between mb-10">
-                <div>
-                  <p className="text-[#888] text-sm">
-                    Startup Growth
-                  </p>
-
-                  <h2 className="text-3xl font-bold mt-2">
-                    +28% this month
-                  </h2>
-                </div>
-
-                <div className="text-violet-400">
-                  <BarChart3 size={34} />
-                </div>
-              </div>
-
-              <div className="flex items-end gap-4 h-[280px]">
-                <div className="flex-1 bg-violet-600 rounded-t-3xl h-[30%]"></div>
-                <div className="flex-1 bg-violet-600 rounded-t-3xl h-[55%]"></div>
-                <div className="flex-1 bg-violet-600 rounded-t-3xl h-[45%]"></div>
-                <div className="flex-1 bg-violet-600 rounded-t-3xl h-[80%]"></div>
-                <div className="flex-1 bg-violet-600 rounded-t-3xl h-[65%]"></div>
-                <div className="flex-1 bg-violet-600 rounded-t-3xl h-[95%]"></div>
-              </div>
+          <div className="text-center">
+            <div className="w-24 h-24 mx-auto rounded-full border-4 border-violet-500 flex items-center justify-center mb-8 shadow-[0_0_25px_rgba(139,92,246,0.4)]">
+              <BarChart3
+                size={40}
+                className="text-violet-400"
+              />
             </div>
 
-            <div className="bg-[#111] border border-[#222] rounded-3xl p-8">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold">
-                  AI Tasks
-                </h2>
+            <p className="text-violet-500 font-medium mb-4 tracking-widest">
+              FounderOS Dashboard
+            </p>
 
-                <Brain
-                  className="text-violet-400"
-                  size={30}
-                />
+            <h1 className="text-5xl sm:text-6xl font-bold mb-6">
+              Coming Soon
+            </h1>
+
+            <p className="text-[#888] text-lg max-w-2xl mx-auto leading-8">
+              We're building a powerful analytics
+              dashboard for founders. Soon you'll
+              be able to monitor startup growth,
+              AI activity, workspace performance,
+              business insights, and much more —
+              all from one intelligent command
+              center.
+            </p>
+
+            <div className="mt-10 inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-[#111] border border-[#222]">
+              <div className="w-3 h-3 rounded-full bg-violet-500 animate-pulse"></div>
+
+              <span className="text-[#d1d1d1]">
+                Under Active Development
+              </span>
+            </div>
+
+            <div className="mt-12 grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              <div className="bg-[#111] border border-[#222] rounded-2xl p-5">
+                <h3 className="font-semibold mb-2">
+                  Startup Analytics
+                </h3>
+
+                <p className="text-sm text-[#777]">
+                  Track growth, engagement,
+                  revenue, and performance metrics.
+                </p>
               </div>
 
-              <div className="space-y-5">
-                <div className="bg-[#181818] rounded-2xl p-5 border border-[#222]">
-                  <p className="font-medium">
-                    Investor Pitch Draft
-                  </p>
+              <div className="bg-[#111] border border-[#222] rounded-2xl p-5">
+                <h3 className="font-semibold mb-2">
+                  AI Insights
+                </h3>
 
-                  <p className="text-[#888] text-sm mt-2">
-                    AI generated startup pitch deck
-                  </p>
-                </div>
+                <p className="text-sm text-[#777]">
+                  Receive intelligent
+                  recommendations and business
+                  suggestions.
+                </p>
+              </div>
 
-                <div className="bg-[#181818] rounded-2xl p-5 border border-[#222]">
-                  <p className="font-medium">
-                    Market Analysis
-                  </p>
+              <div className="bg-[#111] border border-[#222] rounded-2xl p-5">
+                <h3 className="font-semibold mb-2">
+                  Workspace Reports
+                </h3>
 
-                  <p className="text-[#888] text-sm mt-2">
-                    AI analyzed competitor trends
-                  </p>
-                </div>
-
-                <div className="bg-[#181818] rounded-2xl p-5 border border-[#222]">
-                  <p className="font-medium">
-                    Growth Suggestions
-                  </p>
-
-                  <p className="text-[#888] text-sm mt-2">
-                    Personalized startup recommendations
-                  </p>
-                </div>
+                <p className="text-sm text-[#777]">
+                  Monitor projects, tasks, chats,
+                  and founder productivity.
+                </p>
               </div>
             </div>
           </div>

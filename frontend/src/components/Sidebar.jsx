@@ -28,10 +28,8 @@ function Sidebar() {
     renameChat,
   } = useChat();
 
-  const {
-    user,
-    setShowAuthModal,
-  } = useAuth();
+  const { user, setShowAuthModal } =
+    useAuth();
 
   const [openMenu, setOpenMenu] =
     useState(null);
@@ -101,11 +99,8 @@ function Sidebar() {
           }`}
         >
           <Plus size={20} />
-
           {!collapsed && (
-            <span>
-              New Workspace
-            </span>
+            <span>New Workspace</span>
           )}
         </Link>
 
@@ -125,7 +120,6 @@ function Sidebar() {
           }`}
         >
           <MessageSquare size={18} />
-
           {!collapsed && (
             <span className="text-sm text-[#d1d1d1]">
               Dashboard
@@ -142,15 +136,13 @@ function Sidebar() {
 
             <div className="space-y-1">
               {chats.length === 0 ? (
-                <div className="px-3">
-                  <p className="text-sm text-[#666]">
-                    No workspaces yet
-                  </p>
-                </div>
+                <p className="text-sm text-[#666] px-3">
+                  No workspaces yet
+                </p>
               ) : (
                 chats.map((chat) => (
                   <div
-                    key={chat.id}
+                    key={chat._id}
                     className="relative group"
                   >
                     <button
@@ -160,9 +152,11 @@ function Sidebar() {
                           return;
                         }
 
-                        setCurrentChatId(chat.id);
+                        setCurrentChatId(
+                          chat._id
+                        );
                       }}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#171717] text-left transition-all"
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#171717] text-left"
                     >
                       <MessageSquare
                         size={14}
@@ -170,7 +164,7 @@ function Sidebar() {
                       />
 
                       {editingChat ===
-                      chat.id ? (
+                      chat._id ? (
                         <input
                           autoFocus
                           value={newTitle}
@@ -184,29 +178,26 @@ function Sidebar() {
                               newTitle.trim()
                             ) {
                               renameChat(
-                                chat.id,
+                                chat._id,
                                 newTitle
                               );
                             }
-
                             setEditingChat(
                               null
                             );
                           }}
                           onKeyDown={(e) => {
                             if (
-                              e.key ===
-                              "Enter"
+                              e.key === "Enter"
                             ) {
                               if (
                                 newTitle.trim()
                               ) {
                                 renameChat(
-                                  chat.id,
+                                  chat._id,
                                   newTitle
                                 );
                               }
-
                               setEditingChat(
                                 null
                               );
@@ -224,61 +215,45 @@ function Sidebar() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-
                         setOpenMenu(
-                          openMenu ===
-                            chat.id
+                          openMenu === chat._id
                             ? null
-                            : chat.id
+                            : chat._id
                         );
                       }}
-                      className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-all p-1 rounded hover:bg-[#222]"
+                      className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 p-1 hover:bg-[#222] rounded"
                     >
-                      <MoreHorizontal
-                        size={15}
-                      />
+                      <MoreHorizontal size={15} />
                     </button>
 
-                    {openMenu ===
-                      chat.id && (
-                      <div className="absolute right-2 top-10 bg-[#151515] border border-[#2a2a2a] rounded-xl shadow-xl z-50 overflow-hidden">
+                    {openMenu === chat._id && (
+                      <div className="absolute right-2 top-10 bg-[#151515] border border-[#2a2a2a] rounded-xl overflow-hidden z-50">
                         <button
                           onClick={() => {
                             setEditingChat(
-                              chat.id
+                              chat._id
                             );
-
                             setNewTitle(
                               chat.title
                             );
-
-                            setOpenMenu(
-                              null
-                            );
+                            setOpenMenu(null);
                           }}
                           className="flex items-center gap-2 px-4 py-2 hover:bg-[#1d1d1d] w-full text-sm"
                         >
-                          <Pencil
-                            size={14}
-                          />
+                          <Pencil size={14} />
                           Rename
                         </button>
 
                         <button
                           onClick={() => {
                             deleteChat(
-                              chat.id
+                              chat._id
                             );
-
-                            setOpenMenu(
-                              null
-                            );
+                            setOpenMenu(null);
                           }}
                           className="flex items-center gap-2 px-4 py-2 text-red-400 hover:bg-[#1d1d1d] w-full text-sm"
                         >
-                          <Trash2
-                            size={14}
-                          />
+                          <Trash2 size={14} />
                           Delete
                         </button>
                       </div>
@@ -301,14 +276,13 @@ function Sidebar() {
               setShowAuthModal(true);
             }
           }}
-          className={`w-full flex items-center p-3 rounded-xl hover:bg-[#171717] transition-all ${
+          className={`w-full flex items-center p-3 rounded-xl hover:bg-[#171717] ${
             collapsed
               ? "justify-center"
               : "gap-3"
           }`}
         >
           <Settings size={18} />
-
           {!collapsed && (
             <span className="text-sm text-[#d1d1d1]">
               Settings

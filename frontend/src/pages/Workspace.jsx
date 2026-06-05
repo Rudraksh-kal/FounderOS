@@ -1,4 +1,4 @@
-import {
+ import {
   useState,
   useRef,
   useEffect,
@@ -27,18 +27,17 @@ function Workspace() {
   const {
     currentChat,
     currentChatId,
+    setCurrentChatId,
     createChat,
     addMessage,
   } = useChat();
 
   const [input, setInput] = useState("");
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
 
-  const messages =
-    currentChat?.messages || [];
+  const messages = currentChat?.messages || [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -48,35 +47,30 @@ function Workspace() {
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
-
-    let chatId = currentChatId;
-
-    if (!chatId) {
-      chatId = createChat(input);
-    }
+    
 
     const userInput = input;
-
-    addMessage(
-      chatId,
-      "user",
-      userInput
-    );
-
     setInput("");
     setLoading(true);
 
+    let chatId = currentChatId;
+
     try {
-      const token =
-        await auth.currentUser.getIdToken();
+      if (!chatId) {
+        chatId = await createChat(userInput);
+        setCurrentChatId(chatId);
+      }
+
+      await addMessage(chatId, "user", userInput);
+
+      const token = await auth.currentUser.getIdToken();
 
       const response = await fetch(
         "http://localhost:4000/api/ai/analyze",
         {
           method: "POST",
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -85,57 +79,45 @@ function Workspace() {
         }
       );
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to get response"
-        );
+        throw new Error(data.message || "Failed to analyze idea");
       }
 
-      addMessage(
-        chatId,
-        "ai",
-        data.analysis.analysis
-      );
+      await addMessage(chatId, "ai", data.analysis.analysis);
     } catch (error) {
-      addMessage(
+      await addMessage(
         chatId,
         "ai",
-        error.message ||
-          "Something went wrong."
+        error.message || "Something went wrong."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSuggestion = async (
-    text
-  ) => {
+  const handleSuggestion = async (text) => {
     let chatId = currentChatId;
-
-    if (!chatId) {
-      chatId = createChat(text);
-    }
-
-    addMessage(chatId, "user", text);
 
     setLoading(true);
 
     try {
-      const token =
-        await auth.currentUser.getIdToken();
+      if (!chatId) {
+        chatId = await createChat(text);
+        setCurrentChatId(chatId);
+      }
+
+      await addMessage(chatId, "user", text);
+
+      const token = await auth.currentUser.getIdToken();
 
       const response = await fetch(
         "http://localhost:4000/api/ai/analyze",
         {
           method: "POST",
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -144,27 +126,18 @@ function Workspace() {
         }
       );
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to get response"
-        );
+        throw new Error(data.message || "Failed to get response");
       }
 
-      addMessage(
-        chatId,
-        "ai",
-        data.analysis.analysis
-      );
+      await addMessage(chatId, "ai", data.analysis.analysis);
     } catch (error) {
-      addMessage(
+      await addMessage(
         chatId,
         "ai",
-        error.message ||
-          "Something went wrong."
+        error.message || "Something went wrong."
       );
     } finally {
       setLoading(false);
@@ -177,9 +150,7 @@ function Workspace() {
 
       <main
         className={`transition-all duration-500 ${
-          collapsed
-            ? "ml-[110px]"
-            : "ml-[260px]"
+          collapsed ? "ml-[110px]" : "ml-[260px]"
         }`}
       >
         <Navbar />
@@ -193,8 +164,7 @@ function Workspace() {
                 </h1>
 
                 <p className="text-[#888] mt-5 text-center max-w-xl">
-                  What can I help you build
-                  today?
+                  What can I help you build today?
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-4 mt-12 w-full">
@@ -210,15 +180,11 @@ function Workspace() {
                       size={22}
                       className="text-violet-400 mb-3"
                     />
-
                     <h3 className="font-semibold mb-2">
                       Startup Idea
                     </h3>
-
                     <p className="text-sm text-[#888]">
-                      Validate my startup
-                      idea and identify
-                      risks.
+                      Validate my startup idea and identify risks.
                     </p>
                   </button>
 
@@ -234,14 +200,11 @@ function Workspace() {
                       size={22}
                       className="text-violet-400 mb-3"
                     />
-
                     <h3 className="font-semibold mb-2">
                       Investor Pitch
                     </h3>
-
                     <p className="text-sm text-[#888]">
-                      Create a pitch deck
-                      outline for investors.
+                      Create a pitch deck outline for investors.
                     </p>
                   </button>
 
@@ -257,14 +220,11 @@ function Workspace() {
                       size={22}
                       className="text-violet-400 mb-3"
                     />
-
                     <h3 className="font-semibold mb-2">
                       Market Research
                     </h3>
-
                     <p className="text-sm text-[#888]">
-                      Analyze competitors and
-                      market opportunities.
+                      Analyze competitors and market opportunities.
                     </p>
                   </button>
                 </div>
@@ -272,54 +232,44 @@ function Workspace() {
             ) : (
               <div className="max-w-4xl mx-auto py-8">
                 <div className="space-y-6">
-                  {messages.map(
-                    (message, index) => (
+                  {messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${
+                        message.sender === "user"
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
                       <div
-                        key={index}
-                        className={`flex ${
-                          message.sender ===
-                          "user"
-                            ? "justify-end"
-                            : "justify-start"
+                        className={`max-w-[80%] px-5 py-4 rounded-3xl whitespace-pre-wrap ${
+                          message.sender === "user"
+                            ? "bg-violet-600"
+                            : "bg-[#111] border border-[#222]"
                         }`}
                       >
-                        <div
-                          className={`max-w-[80%] px-5 py-4 rounded-3xl whitespace-pre-wrap ${
-                            message.sender ===
-                            "user"
-                              ? "bg-violet-600"
-                              : "bg-[#111] border border-[#222]"
-                          }`}
-                        >
-                          {message.sender ===
-                          "ai" ? (
-                            <div className="prose prose-invert max-w-none">
-                              <ReactMarkdown>
-                                {
-                                  message.text
-                                }
-                              </ReactMarkdown>
-                            </div>
-                          ) : (
-                            message.text
-                          )}
-                        </div>
+                        {message.sender === "ai" ? (
+                          <div className="prose prose-invert max-w-none">
+                            <ReactMarkdown>
+                              {message.text}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          message.text
+                        )}
                       </div>
-                    )
-                  )}
+                    </div>
+                  ))}
 
                   {loading && (
                     <div className="flex justify-start">
                       <div className="bg-[#111] border border-[#222] px-5 py-4 rounded-3xl animate-pulse">
-                        FounderOS is
-                        thinking...
+                        FounderOS is thinking...
                       </div>
                     </div>
                   )}
 
-                  <div
-                    ref={messagesEndRef}
-                  />
+                  <div ref={messagesEndRef} />
                 </div>
               </div>
             )}
@@ -331,17 +281,9 @@ function Workspace() {
                 <input
                   type="text"
                   value={input}
-                  onChange={(e) =>
-                    setInput(
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "Enter"
-                    ) {
-                      sendMessage();
-                    }
+                    if (e.key === "Enter") sendMessage();
                   }}
                   placeholder="Ask FounderOS anything..."
                   className="flex-1 bg-transparent outline-none px-3 text-white placeholder:text-[#666]"
@@ -357,9 +299,7 @@ function Workspace() {
               </div>
 
               <p className="text-center text-xs text-[#555] mt-3">
-                FounderOS can make
-                mistakes. Verify important
-                information.
+                FounderOS can make mistakes. Verify important information.
               </p>
             </div>
           </div>
