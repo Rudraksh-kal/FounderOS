@@ -51,23 +51,23 @@ FounderOS/
 ## ⚙️ Setup Instructions
 
 ## a) Clone Repo
-git clone https://github.com/yourusername/founderos.git
-cd founderos
+- git clone https://github.com/yourusername/founderos.git
+- cd founderos
 ## b) Install Backend
-cd backend
-npm install
+- cd backend
+- npm install
 ## c) .env file Setup
-PORT=4000
-MONGO_URI=your_mongo_uri
-GROQ_API_KEY=your_groq_api_key
-FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_CLIENT_EMAIL=your_client_email
-FIREBASE_PRIVATE_KEY=your_private_key
+- PORT=4000
+- MONGO_URI=your_mongo_uri
+- GROQ_API_KEY=your_groq_api_key
+- FIREBASE_PROJECT_ID=your_project_id
+- FIREBASE_CLIENT_EMAIL=your_client_email
+- FIREBASE_PRIVATE_KEY=your_private_key
 ## d) Install Frontend
-npm run dev
-cd frontend
-npm install
-npm run dev
+- npm run dev
+- cd frontend
+- npm install
+- npm run dev
 
 ## 🧠 How It Works
 
