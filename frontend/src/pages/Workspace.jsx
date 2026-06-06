@@ -66,7 +66,7 @@ function Workspace() {
       const token = await auth.currentUser.getIdToken();
 
       const response = await fetch(
-        "http://localhost:4000/api/ai/analyze",
+        "https://founderos-backend-tsu6.onrender.com/api/ai/analyze",
         {
           method: "POST",
           headers: {
@@ -113,7 +113,7 @@ function Workspace() {
       const token = await auth.currentUser.getIdToken();
 
       const response = await fetch(
-        "http://localhost:4000/api/ai/analyze",
+        "https://founderos-backend-tsu6.onrender.com/api/ai/analyze",
         {
           method: "POST",
           headers: {

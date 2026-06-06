@@ -26,7 +26,7 @@ export function ChatProvider({ children }) {
       const token = await getToken();
       if (!token) return;
 
-      const res = await fetch("http://localhost:4000/api/chats", {
+      const res = await fetch("https://founderos-backend-tsu6.onrender.com/api/chats", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,7 +66,7 @@ export function ChatProvider({ children }) {
     const token = await getToken();
     if (!token) return null;
 
-    const res = await fetch("http://localhost:4000/api/chats", {
+    const res = await fetch("https://founderos-backend-tsu6.onrender.com/api/chats", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export function ChatProvider({ children }) {
     const token = await getToken();
     if (!token) return;
 
-    await fetch(`http://localhost:4000/api/chats/${chatId}/message`, {
+    await fetch(`https://founderos-backend-tsu6.onrender.com/api/chats/${chatId}/message`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export function ChatProvider({ children }) {
     const token = await getToken();
     if (!token) return;
 
-    await fetch(`http://localhost:4000/api/chats/${chatId}/title`, {
+    await fetch(`https://founderos-backend-tsu6.onrender.com/api/chats/${chatId}/title`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -147,7 +147,7 @@ export function ChatProvider({ children }) {
     const token = await getToken();
     if (!token) return;
 
-    await fetch(`http://localhost:4000/api/chats/${chatId}`, {
+    await fetch(`https://founderos-backend-tsu6.onrender.com/api/chats/${chatId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
