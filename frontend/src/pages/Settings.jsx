@@ -12,42 +12,44 @@ function Settings() {
   const { collapsed } = useSidebar();
 
   return (
-    <div className="bg-black min-h-screen text-white">
+    <div className="bg-black min-h-screen text-white overflow-x-hidden">
       <Sidebar />
 
       <main
-        className={`transition-all duration-500 ${
-          collapsed ? "ml-[110px]" : "ml-[260px]"
+        className={`transition-all duration-500 ml-0 ${
+          collapsed
+            ? "lg:ml-[110px]"
+            : "lg:ml-[260px]"
         }`}
       >
         <Navbar />
 
-        <div className="px-6 sm:px-10 lg:px-20 py-12">
+        <div className="px-4 sm:px-8 lg:px-20 py-8 sm:py-12">
           {/* Header */}
-          <div className="mb-12">
-            <h1 className="text-5xl font-bold">
+          <div className="mb-8 sm:mb-12">
+            <h1 className="text-4xl sm:text-5xl font-bold">
               Settings
             </h1>
 
-            <p className="text-[#888] mt-4">
+            <p className="text-[#888] mt-4 text-sm sm:text-base">
               Manage your FounderOS experience.
             </p>
           </div>
 
           {/* Appearance */}
-          <div className="bg-[#111] border border-[#222] rounded-3xl p-8 mb-8">
+          <div className="bg-[#111] border border-[#222] rounded-3xl p-5 sm:p-8 mb-6 sm:mb-8">
             <div className="flex items-center gap-3 mb-6">
               <Moon
                 className="text-violet-500"
                 size={24}
               />
 
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-xl sm:text-2xl font-bold">
                 Appearance
               </h2>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
               <div>
                 <h3 className="font-semibold">
                   Light Mode
@@ -59,7 +61,7 @@ function Settings() {
                 </p>
               </div>
 
-              <div className="relative group">
+              <div className="relative group self-start sm:self-auto">
                 <button
                   disabled
                   className="w-14 h-8 rounded-full bg-[#333] relative cursor-not-allowed"
@@ -75,19 +77,19 @@ function Settings() {
           </div>
 
           {/* Accessibility */}
-          <div className="bg-[#111] border border-[#222] rounded-3xl p-8 mb-8">
+          <div className="bg-[#111] border border-[#222] rounded-3xl p-5 sm:p-8 mb-6 sm:mb-8">
             <div className="flex items-center gap-3 mb-6">
               <Zap
                 className="text-violet-500"
                 size={24}
               />
 
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-xl sm:text-2xl font-bold">
                 Accessibility
               </h2>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
               <div>
                 <h3 className="font-semibold">
                   Reduced Animations
@@ -99,7 +101,7 @@ function Settings() {
                 </p>
               </div>
 
-              <div className="relative group">
+              <div className="relative group self-start sm:self-auto">
                 <button
                   disabled
                   className="w-14 h-8 rounded-full bg-[#333] relative cursor-not-allowed"
@@ -115,28 +117,28 @@ function Settings() {
           </div>
 
           {/* Subscription */}
-          <div className="bg-[#111] border border-[#222] rounded-3xl p-8">
+          <div className="bg-[#111] border border-[#222] rounded-3xl p-5 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
               <CreditCard
                 className="text-violet-500"
                 size={24}
               />
 
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-xl sm:text-2xl font-bold">
                 Subscription
               </h2>
             </div>
 
-            <div className="bg-[#181818] rounded-2xl p-6 border border-[#222]">
+            <div className="bg-[#181818] rounded-2xl p-5 sm:p-6 border border-[#222]">
               <p className="text-sm text-[#888]">
                 Current Plan
               </p>
 
-              <h3 className="text-4xl font-bold text-violet-500 mt-2">
+              <h3 className="text-3xl sm:text-4xl font-bold text-violet-500 mt-2">
                 FREE
               </h3>
 
-              <ul className="mt-5 space-y-2 text-[#ccc]">
+              <ul className="mt-5 space-y-2 text-[#ccc] text-sm sm:text-base">
                 <li>✓ Unlimited Workspaces</li>
                 <li>✓ FounderOS Chat Access</li>
                 <li>✓ Startup Planning Tools</li>
@@ -145,7 +147,7 @@ function Settings() {
 
               <button
                 disabled
-                className="mt-6 px-5 py-3 rounded-xl bg-violet-600/40 cursor-not-allowed"
+                className="mt-6 w-full sm:w-auto px-5 py-3 rounded-xl bg-violet-600/40 cursor-not-allowed"
               >
                 Upgrade Coming Soon
               </button>
