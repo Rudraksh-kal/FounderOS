@@ -11,26 +11,28 @@ function Hero() {
   } = useAuth();
 
   return (
-    <section className="min-h-[80vh] flex flex-col lg:flex-row items-center justify-between px-6 sm:px-10 lg:px-20 gap-16 py-20 bg-black overflow-hidden">
+    <section className="min-h-[80vh] flex flex-col lg:flex-row items-center justify-between px-5 sm:px-10 lg:px-20 gap-12 lg:gap-16 py-16 lg:py-20 bg-black overflow-hidden">
       <motion.div
         initial={{ opacity: 0, x: -80 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
+        className="text-center lg:text-left"
       >
         <div className="inline-block px-5 py-2.5 border border-[#2f2f2f] rounded-full bg-[#161616] text-[#b3b3b3] text-sm mb-8">
           AI Powered Startup Workspace
         </div>
 
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl max-w-[520px] leading-tight bg-gradient-to-r from-white to-violet-600 bg-clip-text text-transparent font-bold">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl max-w-[520px] leading-tight bg-gradient-to-r from-white to-violet-600 bg-clip-text text-transparent font-bold text-center lg:text-left">
           Run your startup smarter with AI.
         </h1>
 
-        <p className="mt-5 text-[#b3b3b3] max-w-[500px] leading-7 text-[17px]">
-          FounderOS brings AI agents, analytics, tasks, and startup tools into
-          one intelligent workspace.
+        <p className="mt-5 text-[#b3b3b3] max-w-[500px] leading-7 text-[16px] sm:text-[17px] text-center lg:text-left">
+          FounderOS brings AI agents, analytics,
+          tasks, and startup tools into one
+          intelligent workspace.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-5 mt-8">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mt-8 items-center lg:items-start">
           <button
             onClick={() => {
               if (!user) {
@@ -55,7 +57,7 @@ function Hero() {
         initial={{ opacity: 0, x: 80 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
-        className="w-full max-w-[540px] h-[320px] bg-[#1a1a1a] rounded-[20px] border border-[#2a2a2a] flex justify-center items-center shadow-[0_0_60px_rgba(124,58,237,0.35)] hover:scale-[1.02] transition-all duration-500 relative overflow-hidden"
+        className="w-full max-w-[540px] h-[280px] sm:h-[320px] bg-[#1a1a1a] rounded-[20px] border border-[#2a2a2a] flex justify-center items-center shadow-[0_0_60px_rgba(124,58,237,0.35)] hover:scale-[1.02] transition-all duration-500 relative overflow-hidden"
       >
         <div className="absolute w-[250px] h-[250px] bg-violet-600 rounded-full blur-[120px] opacity-25 -top-20 -right-20"></div>
 
@@ -64,7 +66,7 @@ function Hero() {
             AI Revenue Analytics
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 h-[100px] bg-[#111] rounded-xl border border-[#2f2f2f] p-5">
               <p className="text-[#888] text-sm">
                 Monthly Growth

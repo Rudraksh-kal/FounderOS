@@ -7,20 +7,22 @@ function Footer() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="bg-black text-white px-6 sm:px-10 lg:px-20 py-16 border-t border-[#1f1f1f]"
+      className="bg-black text-white px-5 sm:px-10 lg:px-20 py-12 lg:py-16 border-t border-[#1f1f1f]"
     >
       <div className="flex flex-col lg:flex-row justify-between gap-12">
-        <div>
-          <h2 className="text-3xl font-bold">
+        <div className="text-center lg:text-left">
+          <h2 className="text-2xl sm:text-3xl font-bold">
             FounderOS
           </h2>
 
-          <p className="text-[#b3b3b3] mt-5 max-w-sm leading-7">
-            AI-powered startup workspace built for founders, teams, and modern businesses.
+          <p className="text-[#b3b3b3] mt-5 max-w-sm leading-7 mx-auto lg:mx-0 text-sm sm:text-base">
+            AI-powered startup workspace built
+            for founders, teams, and modern
+            businesses.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12">
           <div>
             <h3 className="font-semibold mb-5">
               Product
@@ -92,7 +94,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-[#1f1f1f] mt-14 pt-8 text-center text-[#777] text-sm">
+      <div className="border-t border-[#1f1f1f] mt-12 lg:mt-14 pt-8 text-center text-[#777] text-xs sm:text-sm">
         © 2026 FounderOS. All rights reserved.
       </div>
     </motion.footer>

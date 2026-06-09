@@ -149,17 +149,19 @@ function Workspace() {
       <Sidebar />
 
       <main
-        className={`transition-all duration-500 ${
-          collapsed ? "ml-[110px]" : "ml-[260px]"
-        }`}
-      >
+  className={`transition-all duration-500 ${
+    collapsed
+      ? "lg:ml-[110px]"
+      : "lg:ml-[260px]"
+  }`}
+>
         <Navbar />
 
         <div className="h-[calc(100vh-80px)] flex flex-col">
-          <div className="flex-1 overflow-y-auto px-6">
+        <div className="flex-1 overflow-y-auto px-3 sm:px-6">
             {messages.length === 0 ? (
               <div className="max-w-4xl mx-auto h-full flex flex-col items-center justify-center">
-                <h1 className="text-5xl font-bold text-center">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center">
                   Welcome Founder
                 </h1>
 
@@ -167,7 +169,7 @@ function Workspace() {
                   What can I help you build today?
                 </p>
 
-                <div className="grid md:grid-cols-3 gap-4 mt-12 w-full">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 w-full">
                   <button
                     onClick={() =>
                       handleSuggestion(
@@ -242,7 +244,7 @@ function Workspace() {
                       }`}
                     >
                       <div
-                        className={`max-w-[80%] px-5 py-4 rounded-3xl whitespace-pre-wrap ${
+                        className={`max-w-[92%] sm:max-w-[80%] px-5 py-4 rounded-3xl whitespace-pre-wrap ${
                           message.sender === "user"
                             ? "bg-violet-600"
                             : "bg-[#111] border border-[#222]"
@@ -275,9 +277,9 @@ function Workspace() {
             )}
           </div>
 
-          <div className="px-6 pb-6">
+          <div className="px-3 sm:px-6 pb-6">
             <div className="max-w-4xl mx-auto">
-              <div className="bg-[#111] border border-[#222] rounded-3xl p-3 flex items-center gap-3">
+            <div className="bg-[#111] border border-[#222] rounded-3xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
                 <input
                   type="text"
                   value={input}

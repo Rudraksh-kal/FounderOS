@@ -3,6 +3,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+
 import { auth } from "../firebase";
 
 function AuthModal({
@@ -28,40 +29,39 @@ function AuthModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md px-6">
-      <div className="relative w-full max-w-md rounded-3xl border border-[#242424] bg-[#0f0f0f] shadow-[0_0_80px_rgba(124,58,237,0.25)]">
-
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md px-4 sm:px-6">
+      <div className="relative w-full max-w-md rounded-2xl sm:rounded-3xl border border-[#242424] bg-[#0f0f0f] shadow-[0_0_80px_rgba(124,58,237,0.25)]">
         {/* Glow */}
         <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-violet-600 opacity-20 blur-[120px] pointer-events-none"></div>
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 z-50 text-[#888] hover:text-white transition-all duration-300 cursor-pointer"
+          className="absolute right-4 sm:right-5 top-4 sm:top-5 z-50 text-[#888] hover:text-white transition-all duration-300 cursor-pointer"
         >
           <X size={24} />
         </button>
 
-        <div className="relative z-10 p-8">
+        <div className="relative z-10 p-5 sm:p-8">
           <div className="text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-600/20 text-violet-400 text-2xl font-bold">
+            <div className="mx-auto mb-6 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-violet-600/20 text-violet-400 text-xl sm:text-2xl font-bold">
               F
             </div>
 
-            <h1 className="text-4xl font-bold text-white">
+            <h1 className="text-2xl sm:text-4xl font-bold text-white">
               Welcome to FounderOS
             </h1>
 
-            <p className="mt-4 text-[#9a9a9a] leading-6">
+            <p className="mt-4 text-[#9a9a9a] leading-6 text-sm sm:text-base">
               Your AI-powered startup workspace.
               Sign in to continue.
             </p>
           </div>
 
-          <div className="mt-10">
+          <div className="mt-8 sm:mt-10">
             <button
               onClick={handleGoogleLogin}
-              className="group flex w-full items-center justify-center gap-3 rounded-xl bg-white py-3.5 font-medium text-black transition-all duration-300 hover:scale-[1.02] hover:bg-[#f3f3f3] cursor-pointer"
+              className="group flex w-full items-center justify-center gap-3 rounded-xl bg-white py-3 sm:py-3.5 font-medium text-black transition-all duration-300 hover:scale-[1.02] hover:bg-[#f3f3f3] cursor-pointer"
             >
               <svg
                 width="20"
@@ -91,7 +91,7 @@ function AuthModal({
           </div>
 
           <div className="mt-8 border-t border-[#1f1f1f] pt-6 text-center">
-            <p className="text-sm text-[#777]">
+            <p className="text-xs sm:text-sm text-[#777]">
               By continuing, you agree to our
               Terms and Privacy Policy.
             </p>

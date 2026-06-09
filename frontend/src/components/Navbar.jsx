@@ -15,6 +15,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
 import { useAuth } from "../context/AuthContext";
+import { useSidebar } from "../context/SidebarContext";
 
 import AuthModal from "./AuthModal";
 import LogoutModal from "./LogoutModal";
@@ -23,6 +24,9 @@ import { useState } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
+
+  const { setMobileOpen } =
+    useSidebar();
 
   const {
     user,
@@ -66,7 +70,7 @@ function Navbar() {
     <>
       <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-[#1a1a1a]">
         <div className="flex items-center justify-between px-6 sm:px-10 lg:px-20 py-5 text-white">
-          <div className="flex items-center gap-12">
+          <div className="flex items-center gap-6 lg:gap-12">
             <Link
               to="/"
               className="text-2xl font-bold tracking-wide bg-gradient-to-r from-white to-violet-500 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-all duration-300"
@@ -142,6 +146,7 @@ function Navbar() {
                         setShowDropdown(
                           false
                         );
+
                         setShowLogoutModal(
                           true
                         );
@@ -165,7 +170,12 @@ function Navbar() {
               </button>
             )}
 
-            <button className="lg:hidden">
+            <button
+              onClick={() =>
+                setMobileOpen(true)
+              }
+              className="lg:hidden"
+            >
               <Menu size={28} />
             </button>
           </div>

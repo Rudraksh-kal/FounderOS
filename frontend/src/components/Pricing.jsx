@@ -54,23 +54,24 @@ function Pricing() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="bg-black text-white px-6 sm:px-10 lg:px-20 py-24"
+      className="bg-black text-white px-5 sm:px-10 lg:px-20 py-20 lg:py-24"
     >
       <div className="text-center">
         <p className="text-violet-500 font-medium mb-4">
           PRICING
         </p>
 
-        <h2 className="text-4xl sm:text-5xl font-bold">
+        <h2 className="text-3xl sm:text-5xl font-bold">
           Simple pricing for startups.
         </h2>
 
-        <p className="text-[#b3b3b3] mt-6 max-w-2xl mx-auto leading-7">
-          Choose a plan that fits your startup stage and scale as you grow.
+        <p className="text-[#b3b3b3] mt-6 max-w-2xl mx-auto leading-7 text-sm sm:text-base">
+          Choose a plan that fits your startup stage
+          and scale as you grow.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-16">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mt-12 lg:mt-16">
         {plans.map((plan, index) => (
           <motion.div
             key={index}
@@ -81,9 +82,9 @@ function Pricing() {
               delay: index * 0.2,
             }}
             viewport={{ once: true }}
-            className={`rounded-3xl p-8 border transition-all duration-300 hover:-translate-y-2 ${
+            className={`rounded-3xl p-6 sm:p-8 border transition-all duration-300 hover:-translate-y-2 ${
               plan.popular
-                ? "bg-violet-600 border-violet-500 scale-105 shadow-[0_0_40px_rgba(124,58,237,0.4)]"
+                ? "bg-violet-600 border-violet-500 lg:scale-105 shadow-[0_0_40px_rgba(124,58,237,0.4)]"
                 : "bg-[#111] border-[#2a2a2a]"
             }`}
           >
@@ -93,13 +94,13 @@ function Pricing() {
               </p>
             )}
 
-            <h3 className="text-3xl font-bold">
+            <h3 className="text-2xl sm:text-3xl font-bold">
               {plan.name}
             </h3>
 
-            <h2 className="text-5xl font-bold mt-6">
+            <h2 className="text-4xl sm:text-5xl font-bold mt-6">
               {plan.price}
-              <span className="text-lg text-[#d1d1d1]">
+              <span className="text-base sm:text-lg text-[#d1d1d1]">
                 /mo
               </span>
             </h2>
@@ -108,7 +109,7 @@ function Pricing() {
               {plan.features.map((feature, i) => (
                 <p
                   key={i}
-                  className="text-[16px]"
+                  className="text-[15px] sm:text-[16px]"
                 >
                   ✓ {feature}
                 </p>

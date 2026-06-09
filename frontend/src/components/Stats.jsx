@@ -19,18 +19,18 @@ function Stats() {
   ];
 
   return (
-    <section className="bg-black text-white px-6 sm:px-10 lg:px-20 py-10">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <section className="bg-black text-white px-5 sm:px-10 lg:px-20 py-8 sm:py-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((item, index) => (
           <div
             key={index}
-            className="bg-[#111] border border-[#2a2a2a] rounded-2xl p-8 text-center hover:border-violet-500 hover:-translate-y-1 transition-all duration-300"
+            className="bg-[#111] border border-[#2a2a2a] rounded-2xl p-5 sm:p-8 text-center hover:border-violet-500 hover:-translate-y-1 transition-all duration-300"
           >
-            <h2 className="text-4xl font-bold text-violet-500">
+            <h2 className="text-2xl sm:text-4xl font-bold text-violet-500">
               {item.number}
             </h2>
 
-            <p className="text-[#b3b3b3] mt-3">
+            <p className="text-[#b3b3b3] mt-2 sm:mt-3 text-xs sm:text-base">
               {item.label}
             </p>
           </div>
