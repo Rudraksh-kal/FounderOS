@@ -40,16 +40,18 @@ function Navbar() {
   const [showLogoutModal, setShowLogoutModal] =
     useState(false);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-
-      setShowDropdown(false);
-      setShowLogoutModal(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const handleLogout = async () => {
+      try {
+        setShowDropdown(false);
+        setShowLogoutModal(false);
+    
+        navigate("/");
+    
+        await signOut(auth);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
   const goToSection = (sectionId) => {
     navigate("/");

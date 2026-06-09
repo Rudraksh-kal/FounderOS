@@ -8,28 +8,36 @@ import Pricing from "../components/Pricing";
 import Footer from "../components/Footer";
 
 import { useSidebar } from "../context/SidebarContext";
-<div id="top"></div>
 
 function Landing() {
   const { collapsed } = useSidebar();
 
   return (
-    <div className="bg-black min-h-screen">
+    <div
+      id="top"
+      className="bg-black min-h-screen overflow-x-hidden"
+    >
       <Sidebar />
 
       <main
-        className={`transition-all duration-500 ${
+        className={`transition-all duration-500 ml-0 ${
           collapsed
-            ? "ml-[90px]"
-            : "ml-[260px]"
+            ? "lg:ml-[90px]"
+            : "lg:ml-[260px]"
         }`}
       >
         <Navbar />
+
         <Hero />
+
         <Stats />
+
         <Features />
+
         <DashboardPreview />
+
         <Pricing />
+
         <Footer />
       </main>
     </div>

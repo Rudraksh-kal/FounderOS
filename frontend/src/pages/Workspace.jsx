@@ -3,6 +3,8 @@
   useRef,
   useEffect,
 } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import ReactMarkdown from "react-markdown";
 
@@ -22,6 +24,8 @@ import {
 } from "lucide-react";
 
 function Workspace() {
+  const navigate = useNavigate();
+const { user } = useAuth();
   const { collapsed } = useSidebar();
 
   const {
@@ -44,6 +48,11 @@ function Workspace() {
       behavior: "smooth",
     });
   }, [messages.length]);
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
