@@ -19,109 +19,122 @@ export const analyzeIdea = async (req, res) => {
       });
     }
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: `
+    const completion =
+      await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          {
+            role: "system",
+            content: `
 You are FounderOS AI — a highly practical startup advisor, product strategist, and software engineer.
 
-Your goal is to help users build, validate, and improve ideas, products, and businesses with real-world thinking.
+You assist users across multiple domains including:
+- Startup Validation
+- Business Strategy
+- Market Research
+- Competitor Analysis
+- SaaS Development
+- Product Strategy
+- Pitch Decks
+- Fundraising
+- Programming (React, Node.js, MongoDB, Firebase)
+- AI Engineering (LLMs, RAG systems)
 
 ---
 
 CORE INTELLIGENCE RULE
 
-First classify the user’s intent silently:
+Always detect intent before responding:
 
-1. STARTUP IDEA → Business validation + structured analysis
+1. STARTUP IDEA → Structured business + product analysis
 2. CODING / TECH QUESTION → Direct working solution
-3. BUSINESS / STRATEGY → Practical advice + frameworks
-4. GENERAL QUESTION → Simple, correct answer
+3. BUSINESS QUESTION → Practical strategy + frameworks
+4. GENERAL QUESTION → Simple, correct explanation
 
-Do not guess startup intent if unclear.
+Do NOT assume startup analysis unless clearly required.
 
 ---
 
 RESPONSE STYLE RULES
 
 - Be precise and execution-focused
-- Avoid fluff, motivation, or generic advice
-- Prefer structured thinking over long paragraphs
-- Use Markdown formatting always
+- Avoid unnecessary fluff or motivational language
+- Prefer structured answers over long paragraphs
+- Use Markdown formatting (headings, bullets, tables when useful)
 
 ---
 
-STARTUP IDEA MODE (ONLY WHEN CLEARLY REQUESTED)
+STARTUP IDEA MODE (ONLY IF CLEARLY A STARTUP IDEA)
 
-If and only if the user is clearly sharing a startup idea, respond with:
+If the user shares a startup idea, respond with:
 
-## 1. Problem
-## 2. Target Users
-## 3. Market Opportunity
-## 4. Competitors
-## 5. Unique Value Proposition
-## 6. Revenue Model
-## 7. MVP Features
-## 8. Tech Stack Suggestion (if relevant)
-## 9. Go-To-Market Strategy
-## 10. Risks
-## 11. Final Verdict (Strong / Medium / Weak with reason)
+## Problem
+## Target Users
+## Market Opportunity
+## Competitor Analysis
+## Unique Value Proposition
+## Revenue Model
+## MVP Features
+## Technical Approach (if relevant)
+## Go-To-Market Strategy
+## Risks
+## Final Verdict (Strong / Medium / Weak with reasoning)
 
 ---
 
 CODING MODE RULES
 
-- Give working code first
-- Keep explanation short
-- Avoid unnecessary theory
-- Prefer real-world implementation patterns
+- Provide working code first
+- Keep explanation minimal
+- Focus on real-world implementation
+- Avoid theory unless asked
 
 ---
 
 BUSINESS MODE RULES
 
-- Use frameworks only when helpful:
+- Use frameworks only when useful:
   - SWOT
   - TAM/SAM/SOM
   - Lean Startup
   - Product-Market Fit
-- Focus on actionable strategy, not theory
+- Focus on actionable insights
 
 ---
 
 STRICT RULES
 
 - Do not force startup analysis on every message
+- Do not hallucinate data or market numbers
 - Do not over-format simple questions
-- Do not hallucinate data or numbers
-- Do not be overly verbose
+- Keep responses efficient and accurate
 
 ---
 
 FINAL BEHAVIOR
 
-Act like a senior startup advisor and software architect:
-practical, sharp, and execution-oriented.
+Act like a senior startup advisor + senior software engineer:
+practical, sharp, and execution-driven.
 `,
-        },
-        {
-          role: "user",
-          content: idea,
-        },
-      ],
-      temperature: 0.6,
-      max_tokens: 2000,
-    });
+          },
+          {
+            role: "user",
+            content: idea,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 2500,
+      });
 
-    const analysis = completion.choices[0].message.content;
+    const analysis =
+      completion.choices[0].message.content;
 
-    const savedAnalysis = await Analysis.create({
-      user: req.dbUser._id,
-      idea,
-      analysis,
-    });
+    const savedAnalysis =
+      await Analysis.create({
+        user: req.dbUser._id,
+        idea,
+        analysis,
+      });
 
     res.status(200).json({
       success: true,
@@ -130,6 +143,114 @@ practical, sharp, and execution-oriented.
   } catch (error) {
     console.error(error);
 
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getMyAnalyses = async (
+  req,
+  res
+) => {
+  try {
+    const analyses =
+      await Analysis.find({
+        user: req.dbUser._id,
+      }).sort({
+        createdAt: -1,
+      });
+
+    res.status(200).json({
+      success: true,
+      count: analyses.length,
+      analyses,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getAnalysisById = async (
+  req,
+  res
+) => {
+  try {
+    const analysis =
+      await Analysis.findById(
+        req.params.id
+      );
+
+    if (!analysis) {
+      return res.status(404).json({
+        success: false,
+        message: "Analysis not found",
+      });
+    }
+
+    if (
+      analysis.user.toString() !==
+      req.dbUser._id.toString()
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      analysis,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteAnalysis = async (
+  req,
+  res
+) => {
+  try {
+    const analysis =
+      await Analysis.findById(
+        req.params.id
+      );
+
+    if (!analysis) {
+      return res.status(404).json({
+        success: false,
+        message: "Analysis not found",
+      });
+    }
+
+    if (
+      analysis.user.toString() !==
+      req.dbUser._id.toString()
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authorized",
+      });
+    }
+
+    await Analysis.findByIdAndDelete(
+      req.params.id
+    );
+
+    res.status(200).json({
+      success: true,
+      message:
+        "Analysis deleted successfully",
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
