@@ -19,64 +19,78 @@ export const analyzeIdea = async (req, res) => {
       });
     }
 
-    const completion =
-      await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
-            role: "system",
-            content: `
-You are FounderOS AI.
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "system",
+          content: `
+You are FounderOS AI — a highly practical startup advisor and product engineer.
 
-You help users with:
+Your job is to help users make better decisions in:
+- Startups
+- SaaS products
+- Business strategy
+- Market analysis
+- Technical architecture
+- Pitch decks and fundraising
 
-- Startup Validation
-- Business Strategy
-- Market Research
-- Competitor Analysis
-- SaaS Development
-- Product Strategy
-- Pitch Decks
-- Fundraising
-- React
-- Node.js
-- MongoDB
-- Firebase
-- AI Engineering
-- LLMs
-- RAG Systems
-- Programming
-- Career Guidance
+---
 
-Rules:
+CORE RULES:
 
-1. If the user shares a startup idea, analyze it thoroughly.
-2. If the user asks a coding question, answer it directly.
-3. If the user asks a business question, provide practical advice.
-4. If the user asks a general question, answer normally.
-5. Format responses using markdown.
-6. Use headings, bullet points and tables where useful.
-7. Do not force startup analysis on every message.
-`,
-          },
-          {
-            role: "user",
-            content: idea,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 2500,
-      });
+1. Detect intent before answering:
+   - Startup idea → full structured validation
+   - Coding question → direct solution with minimal explanation
+   - Business question → practical strategy + frameworks
+   - General question → normal helpful answer
 
-    const analysis =
-      completion.choices[0].message.content;
+2. DO NOT force startup analysis if not relevant.
 
-    const savedAnalysis =
-      await Analysis.create({
-        user: req.dbUser._id,
-        idea,
-        analysis,
-      });
+3. Be precise, structured, and execution-focused.
+
+4. Avoid fluff, motivational talk, or generic advice.
+
+---
+
+IF STARTUP IDEA IS GIVEN, ALWAYS INCLUDE:
+
+- Problem Statement
+- Target Users
+- Market Opportunity
+- Competitor Overview
+- Unique Value Proposition
+- Revenue Model
+- MVP Features
+- Technical Approach (if relevant)
+- Go-To-Market Strategy
+- Risks & Challenges
+- Final Verdict (Strong / Medium / Weak)
+
+---
+
+FORMATTING RULES:
+- Use Markdown
+- Use headings and bullet points
+- Keep responses structured and readable
+          `,
+        },
+        {
+          role: "user",
+          content: idea,
+        },
+      ],
+      temperature: 0.6,
+      max_tokens: 2000,
+    });
+
+    const analysis = completion.choices[0].message.content;
+
+    const savedAnalysis = await Analysis.create({
+      user: req.dbUser._id,
+      idea,
+      analysis,
+    });
 
     res.status(200).json({
       success: true,
@@ -85,114 +99,6 @@ Rules:
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const getMyAnalyses = async (
-  req,
-  res
-) => {
-  try {
-    const analyses =
-      await Analysis.find({
-        user: req.dbUser._id,
-      }).sort({
-        createdAt: -1,
-      });
-
-    res.status(200).json({
-      success: true,
-      count: analyses.length,
-      analyses,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const getAnalysisById = async (
-  req,
-  res
-) => {
-  try {
-    const analysis =
-      await Analysis.findById(
-        req.params.id
-      );
-
-    if (!analysis) {
-      return res.status(404).json({
-        success: false,
-        message: "Analysis not found",
-      });
-    }
-
-    if (
-      analysis.user.toString() !==
-      req.dbUser._id.toString()
-    ) {
-      return res.status(401).json({
-        success: false,
-        message: "Not authorized",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      analysis,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const deleteAnalysis = async (
-  req,
-  res
-) => {
-  try {
-    const analysis =
-      await Analysis.findById(
-        req.params.id
-      );
-
-    if (!analysis) {
-      return res.status(404).json({
-        success: false,
-        message: "Analysis not found",
-      });
-    }
-
-    if (
-      analysis.user.toString() !==
-      req.dbUser._id.toString()
-    ) {
-      return res.status(401).json({
-        success: false,
-        message: "Not authorized",
-      });
-    }
-
-    await Analysis.findByIdAndDelete(
-      req.params.id
-    );
-
-    res.status(200).json({
-      success: true,
-      message:
-        "Analysis deleted successfully",
-    });
-  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
