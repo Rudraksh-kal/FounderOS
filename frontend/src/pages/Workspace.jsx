@@ -1,4 +1,4 @@
- import {
+import {
   useState,
   useRef,
   useEffect,
@@ -18,6 +18,8 @@ import { auth } from "../firebase";
 
 import {
   Send,
+  Plus,
+  X,
   Lightbulb,
   Rocket,
   TrendingUp,
@@ -25,7 +27,7 @@ import {
 
 function Workspace() {
   const navigate = useNavigate();
-const { user } = useAuth();
+  const { user } = useAuth();
   const { collapsed } = useSidebar();
 
   const {
@@ -36,12 +38,15 @@ const { user } = useAuth();
     addMessage,
   } = useChat();
 
+
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const messages = currentChat?.messages || [];
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -56,7 +61,7 @@ const { user } = useAuth();
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
-    
+
 
     const userInput = input;
     setInput("");
@@ -152,22 +157,95 @@ const { user } = useAuth();
       setLoading(false);
     }
   };
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    setSelectedFile(file);
+
+    let chatId = currentChatId;
+
+    try {
+      setLoading(true);
+
+      if (!chatId) {
+        chatId = await createChat(
+          `Document: ${file.name}`
+        );
+
+        setCurrentChatId(chatId);
+      }
+
+      await addMessage(
+        chatId,
+        "user",
+        `📄 Uploaded document: ${file.name}`
+      );
+
+      const token =
+        await auth.currentUser.getIdToken();
+
+      const formData = new FormData();
+
+      formData.append(
+        "document",
+        file
+      );
+
+      const response = await fetch(
+        "https://founderos-backend-tsu6.onrender.com/api/ai/analyze-document",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          "Failed to analyze document"
+        );
+      }
+
+      await addMessage(
+        chatId,
+        "ai",
+        data.analysis
+      );
+    } catch (error) {
+      await addMessage(
+        chatId,
+        "ai",
+        error.message ||
+        "Document analysis failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="bg-black min-h-screen text-white">
       <Sidebar />
 
       <main
-  className={`transition-all duration-500 ${
-    collapsed
-      ? "lg:ml-[110px]"
-      : "lg:ml-[260px]"
-  }`}
->
+        className={`transition-all duration-500 ${collapsed
+          ? "lg:ml-[110px]"
+          : "lg:ml-[260px]"
+          }`}
+      >
         <Navbar />
 
         <div className="h-[calc(100vh-80px)] flex flex-col">
-        <div className="flex-1 overflow-y-auto px-3 sm:px-6">
+          <div className="flex-1 overflow-y-auto px-3 sm:px-6">
             {messages.length === 0 ? (
               <div className="max-w-4xl mx-auto h-full flex flex-col items-center justify-center">
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center">
@@ -246,18 +324,16 @@ const { user } = useAuth();
                   {messages.map((message, index) => (
                     <div
                       key={index}
-                      className={`flex ${
-                        message.sender === "user"
-                          ? "justify-end"
-                          : "justify-start"
-                      }`}
+                      className={`flex ${message.sender === "user"
+                        ? "justify-end"
+                        : "justify-start"
+                        }`}
                     >
                       <div
-                        className={`max-w-[92%] sm:max-w-[80%] px-5 py-4 rounded-3xl whitespace-pre-wrap ${
-                          message.sender === "user"
-                            ? "bg-violet-600"
-                            : "bg-[#111] border border-[#222]"
-                        }`}
+                        className={`max-w-[92%] sm:max-w-[80%] px-5 py-4 rounded-3xl whitespace-pre-wrap ${message.sender === "user"
+                          ? "bg-violet-600"
+                          : "bg-[#111] border border-[#222]"
+                          }`}
                       >
                         {message.sender === "ai" ? (
                           <div className="prose prose-invert max-w-none">
@@ -288,7 +364,24 @@ const { user } = useAuth();
 
           <div className="px-3 sm:px-6 pb-6">
             <div className="max-w-4xl mx-auto">
-            <div className="bg-[#111] border border-[#222] rounded-3xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
+              <div className="bg-[#111] border border-[#222] rounded-3xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-shrink-0 bg-[#1a1a1a] hover:bg-[#222] transition-all duration-300 p-2.5 sm:p-3 rounded-2xl"
+                >
+                  <Plus
+                    size={16}
+                    className="sm:w-[18px] sm:h-[18px]"
+                  />
+                </button>
+
+                <input
+                  type="file"
+                  accept=".docx,.txt"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
                 <input
                   type="text"
                   value={input}
@@ -305,13 +398,37 @@ const { user } = useAuth();
                   disabled={loading}
                   className="bg-violet-600 hover:bg-violet-500 transition-all duration-300 p-3 rounded-2xl disabled:opacity-50"
                 >
-                  <Send size={18} />
+                  <Send
+                    size={16}
+                    className="sm:w-[18px] sm:h-[18px]"
+                  />
                 </button>
               </div>
 
               <p className="text-center text-xs text-[#555] mt-3">
                 FounderOS can make mistakes. Verify important information.
               </p>
+
+              {selectedFile && (
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <p className="text-xs text-violet-400 truncate max-w-[250px] sm:max-w-[400px]">
+                    Selected: {selectedFile.name}
+                  </p>
+
+                  <button
+                    onClick={() => {
+                      setSelectedFile(null);
+
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = "";
+                      }
+                    }}
+                    className="text-red-400 hover:text-red-300 transition"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

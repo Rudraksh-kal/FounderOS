@@ -1,6 +1,8 @@
 import express from "express";
+
 import {
   analyzeIdea,
+  analyzeDocument,
   getMyAnalyses,
   getAnalysisById,
   deleteAnalysis,
@@ -8,6 +10,7 @@ import {
 
 import protect from "../middleware/firebaseAuth.js";
 import syncUser from "../middleware/syncUser.js";
+import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -16,6 +19,14 @@ router.post(
   protect,
   syncUser,
   analyzeIdea
+);
+
+router.post(
+  "/analyze-document",
+  protect,
+  syncUser,
+  upload.single("document"),
+  analyzeDocument
 );
 
 router.get(

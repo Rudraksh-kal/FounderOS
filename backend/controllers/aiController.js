@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import Groq from "groq-sdk";
 import Analysis from "../models/Analysis.js";
+import mammoth from "mammoth";
 
 dotenv.config();
 
@@ -251,6 +252,112 @@ export const deleteAnalysis = async (
         "Analysis deleted successfully",
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+    
+  }
+};
+export const analyzeDocument = async (
+  req,
+  res
+) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    let extractedText = "";
+ 
+    if (
+      req.file.mimetype ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const docData =
+        await mammoth.extractRawText({
+          buffer: req.file.buffer,
+        });
+
+      extractedText = docData.value;
+    } else if (
+      req.file.mimetype ===
+      "text/plain"
+    ) {
+      extractedText =
+        req.file.buffer.toString("utf8");
+    } else {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Only PDF, DOCX and TXT files are supported",
+      });
+    }
+
+    if (!extractedText.trim()) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Could not extract content from document",
+      });
+    }
+
+    const completion =
+      await groq.chat.completions.create({
+        model:
+          "llama-3.3-70b-versatile",
+
+        messages: [
+          {
+            role: "system",
+            content: `
+You are an expert startup advisor.
+
+Analyze the uploaded document and provide:
+
+# Overall Score (1-10)
+
+# Strengths
+
+# Weaknesses
+
+# Missing Areas
+
+# Improvements
+
+# Final Verdict
+
+Be practical, direct and constructive.
+`,
+          },
+          {
+            role: "user",
+            content:
+              extractedText.slice(
+                0,
+                15000
+              ),
+          },
+        ],
+
+        temperature: 0.7,
+        max_tokens: 2500,
+      });
+
+    const analysis =
+      completion.choices[0].message
+        .content;
+
+    res.status(200).json({
+      success: true,
+      analysis,
+    });
+  } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,
